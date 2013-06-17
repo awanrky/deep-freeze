@@ -19,3 +19,7 @@ For more information on Amazon Glacier storage...
  - [Glacier FAQs](http://aws.amazon.com/glacier/faqs/)
  - [Glacier Developer Guide](http://awsdocs.s3.amazonaws.com/glacier/latest/glacier-dg.pdf)
 
+Resources...
+
+ - [AWS Toolkit for Visual Studio](http://aws.amazon.com/visualstudio/)
+ - [AWS Tools for Windows Powershell](http://aws.amazon.com/powershell/)
