@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DeepFreeze.Local;
 using NUnit.Framework;
 
 namespace DeepFreezeTest.Local
@@ -17,14 +15,43 @@ namespace DeepFreezeTest.Local
             get { return _currentDirectory ?? (_currentDirectory = new DirectoryInfo(System.Environment.CurrentDirectory)); }
         }
 
+        private DirectoryInfo _testDirectory;
+        private DirectoryInfo TestDirectory
+        {
+            get
+            {
+                return _testDirectory ??
+                       (_testDirectory = new DirectoryInfo(Path.Combine(CurrentDirectory.FullName, "Local/TestDirectory")));
+            }
+        }
+
         [TestCase]
         public void ShouldReturnAnArchiveName()
         {
             var dateTime = new DateTime(2013, 6, 4, 12, 33, 22);
-            var archive = new DeepFreeze.Local.Archive(CurrentDirectory);
+            var archive = new Archive();
 
-            var expected = string.Format("{0}-2013-06-04.12.33.22.zip", CurrentDirectory.Name);
-            Assert.AreEqual(expected, archive.GetArchiveName(dateTime));
+            var expected = "base-filename-2013-06-04.12.33.22.zip";
+            Assert.AreEqual(expected, Archive.GetArchiveName("base-filename", dateTime));
+        }
+
+        [TestCase]
+        public void ShouldCreateAnArchive()
+        {
+            var location = new Location(TestDirectory, "desc");
+
+            var archive = new Archive();
+
+            var archiveFilename = Archive.GetArchiveName(
+                String.Format("{0}-should-create-an-archive-test", CurrentDirectory.FullName),
+                DateTime.Now);
+
+            archive.Compress(archiveFilename, location.GetFiles());
+
+            var archiveFile = new FileInfo(archiveFilename);
+
+            Assert.IsTrue(archiveFile.Exists, String.Format("{0} does not exist.", archiveFile.FullName));
+
         }
     }
 }

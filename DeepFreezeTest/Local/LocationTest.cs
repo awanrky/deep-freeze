@@ -26,6 +26,12 @@ namespace DeepFreezeTest.Local
             }
         }
 
+        private DateTime? _baseDateTime;
+        private DateTime? BaseDateTime
+        {
+            get { return _baseDateTime ?? (_baseDateTime = new DateTime(2000, 01, 01)); }
+        }
+
         [TestCase]
         public void ShouldBeAbleToGetAllFiles()
         {
@@ -46,6 +52,58 @@ namespace DeepFreezeTest.Local
                                };
 
             Assert.AreEqual(13, location.GetFiles().Count());
+        }
+
+        [TestCase]
+        public void ShouldBeAbleToFilterFilesByAddingARegularExpressionShowingFilesToExclude()
+        {
+            var location = new Location(TestDirectory, "desc")
+            {
+                ExcludedExpressions = new[]
+                                                             {
+                                                                 ".*e3.*"
+                                                             }
+            };
+
+            Assert.AreEqual(26, location.GetFiles().Count());
+        }
+
+        [TestCase]
+        public void ShouldBeAbleToFilterFilesByUsingABeginningDate()
+        {
+            ResetTestFiles();
+            foreach (var file in TestDirectory.GetFiles("*.*").Take(3))
+            {
+                file.LastWriteTimeUtc = new DateTime(2012, 01, 01);
+            }
+
+            var location = new Location(TestDirectory, "desc") {BeginningDate = new DateTime(2011, 01, 01)};
+
+            Assert.AreEqual(3, location.GetFiles().Count());
+        }
+
+        [TestCase]
+        public void ShouldBeAbleToFilterFilesByUsingAEndingDate()
+        {
+            ResetTestFiles();
+            foreach (var file in TestDirectory.GetFiles("*.*").Take(3))
+            {
+                file.LastWriteTimeUtc = new DateTime(2012, 01, 01);
+            }
+
+            var location = new Location(TestDirectory, "desc") { EndingDate = new DateTime(2011, 01, 01) };
+
+            Assert.AreEqual(36, location.GetFiles().Count());
+        }
+        
+       
+
+        private void ResetTestFiles()
+        {
+            foreach (var file in TestDirectory.GetFiles("*", SearchOption.AllDirectories))
+            {
+                file.LastWriteTimeUtc = BaseDateTime.Value.ToUniversalTime();
+            }
         }
     }
 }

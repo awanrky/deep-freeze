@@ -3,8 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 
 namespace DeepFreeze.Local
 {
@@ -38,9 +36,9 @@ namespace DeepFreeze.Local
             }
         }
 
-        public DateTime BeginningDate { get; set; }
+        public DateTime? BeginningDate { get; set; }
 
-        public DateTime EndingDate { get; set; }
+        public DateTime? EndingDate { get; set; }
 
         public Location(DirectoryInfo baseDirectoryDirectoryInfo, string description)
         {
@@ -51,10 +49,10 @@ namespace DeepFreeze.Local
         public Location(string baseDirectory, string description) : this(new DirectoryInfo(baseDirectory), description)
         {
         }
-
         
-        public void CreateArchive(IEnumerable<string> excludedFiles, IEnumerable<string> includedFiles)
+        public void CreateArchive()
         {
+              
         }
 
         public IEnumerable<FileInfo> GetFiles()
@@ -62,9 +60,13 @@ namespace DeepFreeze.Local
             return BaseDirectoryDirectoryInfo
                 .GetFiles("*", SearchOption.AllDirectories)
                 .Where(f => IncludeRegularExpressions.Any(e => e.IsMatch(f.Name)))
-                .Where(f => !ExcludedRegularExpressions.Any(e => e.IsMatch(f.Name)));
-//                .Where(f => f.LastWriteTimeUtc >= BeginningDate.ToUniversalTime())
-//                .Where(f => f.LastWriteTimeUtc <= EndingDate.ToUniversalTime());
+                .Where(f => !ExcludedRegularExpressions.Any(e => e.IsMatch(f.Name)))
+                .Where(f => BeginningDate == null ||
+                            f.LastWriteTimeUtc >= BeginningDate.Value.ToUniversalTime())
+                .Where(f => EndingDate == null ||
+                            f.LastWriteTimeUtc <= EndingDate.Value.ToUniversalTime());
         }
+
+        
     }
 }
