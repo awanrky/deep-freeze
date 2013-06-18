@@ -45,6 +45,7 @@ namespace DeepFreeze.Local
             return zipstream;
         }
 
+
         public void Compress(string filename, IEnumerable<FileInfo> files)
         {
             using (var zipstream = GetZipOutputStream(filename))
