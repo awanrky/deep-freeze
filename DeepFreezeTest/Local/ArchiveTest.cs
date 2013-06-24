@@ -4,7 +4,7 @@ using System.Linq;
 using DeepFreeze.Local;
 using NUnit.Framework;
 
-namespace DeepFreezeTest.Local
+namespace VaultTest.Local
 {
     [TestFixture]
     public class ArchiveTest
@@ -31,7 +31,7 @@ namespace DeepFreezeTest.Local
             var dateTime = new DateTime(2013, 6, 4, 12, 33, 22);
             var archive = new Archive();
 
-            var expected = "base-filename-2013-06-04.12.33.22.zip";
+            const string expected = "base-filename-2013-06-04.12.33.22.zip";
             Assert.AreEqual(expected, Archive.GetArchiveName("base-filename", dateTime));
         }
 

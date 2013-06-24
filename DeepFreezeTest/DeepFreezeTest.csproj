@@ -42,8 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AwsTest.cs" />
+    <Compile Include="Aws\VaultTest.cs" />
     <Compile Include="Local\ArchiveTest.cs" />
+    <Compile Include="Local\HistoryTest.cs" />
     <Compile Include="Local\LocationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

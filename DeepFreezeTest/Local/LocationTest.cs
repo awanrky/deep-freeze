@@ -5,7 +5,7 @@ using System.Reflection;
 using DeepFreeze.Local;
 using NUnit.Framework;
 
-namespace DeepFreezeTest.Local
+namespace VaultTest.Local
 {
     [TestFixture]
     public class LocationTest
